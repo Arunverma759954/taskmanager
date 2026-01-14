@@ -5,17 +5,23 @@ import TaskList from "../components/TaskList";
 
 export default function Home() {
   const [tasks, setTasks] = useState([]);
+
   useEffect(() => {
     const saved = localStorage.getItem("tasks");
-    if (saved) setTasks(JSON.parse(saved));
+    const parsed = saved ? JSON.parse(saved) : [];
+
+    console.log("✅ LocalStorage Tasks (on load):", parsed);
+
+    setTasks(parsed);
   }, []);
 
-
+  
   useEffect(() => {
     localStorage.setItem("tasks", JSON.stringify(tasks));
+    console.log("🔄 Updated Tasks (saved to localStorage):", tasks);
   }, [tasks]);
 
-  
+   
   const stats = useMemo(() => {
     const total = tasks.length;
     const completed = tasks.filter((t) => t.status === "Completed").length;
@@ -31,39 +37,46 @@ export default function Home() {
       status: "Pending",
       createdAt: new Date().toISOString(),
     };
+
+    console.log("➕ Task Added:", newTask);
+
     setTasks([newTask, ...tasks]);
   };
 
-  
+
   const markCompleted = (id) => {
+    console.log("✅ Mark Completed Task ID:", id);
+
     setTasks((prev) =>
       prev.map((t) => (t.id === id ? { ...t, status: "Completed" } : t))
     );
   };
 
-
+  
   const deleteTask = (id) => {
+    console.log("❌ Delete Task ID:", id);
+
     setTasks((prev) => prev.filter((t) => t.id !== id));
   };
 
-  
+
   const clearAll = () => {
+    console.log("🧹 Clear All Tasks");
     localStorage.removeItem("tasks");
     setTasks([]);
   };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-black text-white">
-      
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-14">
-    
+        {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-8">
           <div>
             
             <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold mt-2">
               Task Manager
             </h1>
-           
+             
           </div>
 
           <button
@@ -84,7 +97,11 @@ export default function Home() {
         
         <div className="bg-white/5 border border-white/10 rounded-3xl p-5 sm:p-8 shadow-2xl backdrop-blur">
           <AddTask onAdd={addTask} />
-          <TaskList tasks={tasks} onComplete={markCompleted} onDelete={deleteTask} />
+          <TaskList
+            tasks={tasks}
+            onComplete={markCompleted}
+            onDelete={deleteTask}
+          />
         </div>
 
         <p className="text-center text-xs text-white/40 mt-10">

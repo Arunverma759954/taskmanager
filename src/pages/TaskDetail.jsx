@@ -9,16 +9,21 @@ export default function TaskDetail() {
   useEffect(() => {
     const saved = localStorage.getItem("tasks");
     if (!saved) {
+      console.log("⚠ No tasks found in localStorage");
       setTask(undefined);
       return;
     }
 
     const tasks = JSON.parse(saved);
     const found = tasks.find((t) => t.id === id);
+
+    console.log("📌 Task Detail Page ID:", id);
+    console.log("📌 Task Found:", found);
+
     setTask(found || undefined);
   }, [id]);
 
-  
+  // Loading
   if (task === null) {
     return (
       <div className="min-h-screen bg-black text-white p-6">
@@ -27,7 +32,7 @@ export default function TaskDetail() {
     );
   }
 
-  
+  // Not found
   if (task === undefined) {
     return (
       <div className="min-h-screen bg-black text-white p-6">

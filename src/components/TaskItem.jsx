@@ -6,7 +6,7 @@ export default function TaskItem({ task, onComplete, onDelete }) {
 
   return (
     <div className="rounded-3xl border border-white/10 bg-white/5 p-5 hover:bg-white/10 transition flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-      {/* Left */}
+      
       <div className="min-w-0">
         <Link
           to={`/tasks/${task.id}`}
@@ -33,8 +33,7 @@ export default function TaskItem({ task, onComplete, onDelete }) {
         </div>
       </div>
 
-      
-      <div className="flex gap-2 shrink-0">
+            <div className="flex gap-2 shrink-0">
         {!completed && (
           <button
             onClick={() => onComplete(task.id)}
